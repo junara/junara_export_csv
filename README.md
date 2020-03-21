@@ -1,36 +1,43 @@
 # JunaraExportCsv
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/junara_export_csv`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Export array or active record to csv.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'junara_export_csv'
+gem 'junara_export_csv', git: 'git://github.com/junara/junara_export_csv.git'
 ```
 
 And then execute:
 
     $ bundle install
 
-Or install it yourself as:
-
-    $ gem install junara_export_csv
-
 ## Usage
 
-TODO: Write usage instructions here
+* output array with item
 
-## Development
+```irb
+records = [['jungo', 'araki', 'usagi']]
+header = ['first_name', 'last_name', 'animal']
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+JunaraExportCsv.run(records, header: header, filename: '2020_export.csv') do |record|
+  [record[0], record[1], record[2]]
+end
+#=> '2020_export.csv'
+# create '2020_export.csv'
+# first_name,last_name,animal
+# jungo,araki,usagi
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+* output active record
 
-## Contributing
+```irb
+# User has "first_name, last_name, animal" attributes
+users = User.all
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/junara_export_csv.
-
+JunaraExportCsv.run(users, header: header, filename: '2020_export.csv') do |user|
+  [user.first_name, user.last_name, user.animal]
+end
+#=> '2020_export.csv'
+```
